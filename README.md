@@ -1,6 +1,9 @@
 # [NOMBRE DEL PROYECTO]
 ## Integrantes:
-### [Carné] [Nombre]
+### 2020035358 Ricardo Soto
+### [Carné] Brandon Redondo
+### [Carné] María Paula Rúbio
+### [Carné] Kevin Lanzas
 
 ### Estado del proyecto: Escala de 1 a 5, 1 siendo completo y 5 deplorable
 ### Enlace del video: (Si esto fue solicitado)
