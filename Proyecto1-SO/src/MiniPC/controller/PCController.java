@@ -63,7 +63,7 @@ public class PCController {
     public void init(){
         this.loadApp();        
         
-        this.cpu1 = new CPU("CPU1","SJF");        
+        this.cpu1 = new CPU("CPU1","FCFS");        
         this.btnStepByStep = this.app.getStepByStep();
         this.btnFileLoad = this.app.getLoadBtn();
         this.btnStats = this.app.getButtonStats();
@@ -108,7 +108,7 @@ public class PCController {
         this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
-        this.cpu1 = new CPU("CPU1","SJF");
+        this.cpu1 = new CPU("CPU1","FCFS");
         
         
 
@@ -154,7 +154,7 @@ public class PCController {
                 JScrollPane scroller = new JScrollPane(inputpanel);
                 scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-                inputpanel.setLayout(new GridLayout(10,10));
+                inputpanel.setLayout(new GridLayout(20,20));
                 //inputpanel.add(new JLabel ("Porfavor ingrese el tiempo de arrivo para los procesos"));   
                 
                 

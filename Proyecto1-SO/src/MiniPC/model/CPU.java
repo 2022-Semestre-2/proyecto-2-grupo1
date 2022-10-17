@@ -7,6 +7,7 @@ package MiniPC.model;
 import MiniPC.model.Algoritmos.SJF;
 import MiniPC.model.Algoritmos.Algoritmos;
 import MiniPC.controller.PCController;
+import MiniPC.model.Algoritmos.FCFS;
 import MiniPC.model.Algoritmos.HRRN;
 import MiniPC.model.Algoritmos.RoundRobin;
 import MiniPC.model.Algoritmos.SRT;
@@ -42,10 +43,12 @@ public class CPU {
     
     public void initializeMapper(){
         this.hashAlgoritmos = new HashMap<>();
-        this.hashAlgoritmos.put("SJF", new SJF());
+        //SRT y SJF los confundi entonces están al revés xdd
+        this.hashAlgoritmos.put("SRT", new SJF());
         this.hashAlgoritmos.put("RR", new RoundRobin());
         this.hashAlgoritmos.put("HRRN", new HRRN());
-        this.hashAlgoritmos.put("SRT", new SRT());
+        this.hashAlgoritmos.put("SJF", new SRT());
+        this.hashAlgoritmos.put("FCFS", new FCFS());
     }
     public CPU(String name, String algoritmoAutilizar){
         this.currentProcessIndex = 0;

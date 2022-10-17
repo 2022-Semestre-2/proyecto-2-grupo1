@@ -1,6 +1,6 @@
 {
-    "MemorySize": 90,
-    "DiskSize": 100,
+    "MemorySize": 100,
+    "DiskSize": 300,
     "Stack": 5,
     "load": 1,
     "store": 1,
