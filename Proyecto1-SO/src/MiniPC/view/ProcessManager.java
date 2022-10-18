@@ -56,28 +56,25 @@ public final class ProcessManager extends javax.swing.JFrame {
     }
       public void reset(){
           int i,j;
-          i = 0;
-          j = 1;
-          while(this.jTableProcessExecution.getValueAt(i, j)!=null){
-               while(this.jTableProcessExecution.getValueAt(i, j)!= null){
-                    jTableProcessExecution.setValueAt(null, i, j);
-                    j++;
-                }
-               i++;
-               j = 1;
-              
+          
+          
+          
+          
+          boolean lineread= true;
+          for(i  =0 ;lineread ;i++){
+              lineread= false;
+             for(j = 1;j<this.memorySize*5;j++ ) {                 
+                 if(jTableProcessExecution1.getValueAt(i,j)!=null){
+                     lineread= true;
+                 }
+                 jTableProcessExecution1.setValueAt(null, i, j);              
+             }
+             
+            
           }
-          i = 0;
-          j = 1;
-         while(this.jTableProcessExecution1.getValueAt(i, j)!=null){
-               while(this.jTableProcessExecution1.getValueAt(i, j)!= null){
-                    jTableProcessExecution1.setValueAt(null, i, j);
-                    j++;
-                }
-               i++;
-               j = 1;
               
-          }
+          
+         
        
             
      

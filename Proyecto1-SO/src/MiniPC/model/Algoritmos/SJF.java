@@ -70,15 +70,19 @@ public class SJF implements Algoritmos{
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
         //ESTO ES PARTE DEL METODO POR DEFECTO, PROCUREN RETORNAR EL PCB que según el algoritmo se debe ejecutar
        PCB result =  this.currentPCB;     
-       
-       this.status = result.executeInstruction(cont);
-       if(this.currentPCB.programFinished()){   
+       if(result!=null){
+           this.status = result.executeInstruction(cont);
+            if(this.currentPCB.programFinished()){   
            this.programFinished = true;
            this.procesosEsperando.remove(this.currentPCB);     
            this.currentPCB = this.procesosEsperando.peek();
            
        }
        
+           
+       }
+       
+      
        this.currentTime++;
        return result;
        

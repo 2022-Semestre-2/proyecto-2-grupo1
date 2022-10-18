@@ -10,10 +10,10 @@ import MiniPC.model.PCB;
 import MiniPC.model.Register;
 import MiniPC.view.ProcessManager;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -26,7 +26,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -104,7 +103,7 @@ public class PCController {
     public void btnClear(java.awt.event.ActionEvent evt) { 
         this.memory = new Memory(app.getMemSize());
         this.disk = new Memory(app.getDiskSize());
-        //this.app.dispose();
+        
         this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
@@ -196,19 +195,22 @@ public class PCController {
                 frame.setVisible(true);
                 frame.setResizable(false);
                 
-                
-        
-       
-       
     }  
     private void handleInputArrival(java.awt.event.ActionEvent evt,ArrayList<JTextField> inputs ,JFrame frame) {
         int i = 0;
         for (JTextField input: inputs){
-            this.pcbList.get(i).setArrivalTime(Integer.parseInt(input.getText()));
+            try{
+                this.pcbList.get(i).setArrivalTime(Integer.parseInt(input.getText()));
             System.out.println(this.pcbList.get(i).getArrivalTime());
+            }catch(NumberFormatException e ){
+                
+            }
+            
             i++;
         }
         frame.setVisible(false);
+        Collections.sort(this.pcbList, (a, b) -> a.getArrivalTime() < b.getArrivalTime() ? -1 : a.getArrivalTime() == b.getArrivalTime() ? 0 : 1);
+        loadPCBstoMem();    
         
     }
     
@@ -269,7 +271,7 @@ public class PCController {
                 }
             }            
         }    
-        loadPCBstoMem();                
+                    
      //   cpu1.loadPCBSArrival();
     }
     
@@ -400,8 +402,10 @@ public class PCController {
 
         // Retrieve the selected files.
         File[] files = chooser.getSelectedFiles();        
+        
         this.filesToPCB(files);
         this.loadPCBArrival();
+        
         
        
        
