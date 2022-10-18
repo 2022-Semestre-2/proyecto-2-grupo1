@@ -20,6 +20,7 @@ public class MemoryRegister implements Register {
    //Lista de valores, para, el param
     private ArrayList<Integer> values; 
     private boolean isInterruption = false;
+    private PCB pcb;
     private Integer totalValue;
     public MemoryRegister(){
     }
@@ -28,6 +29,16 @@ public class MemoryRegister implements Register {
         this.operator = operator;
         this.value = value;
     }
+      @Override
+     public PCB getPCB(){
+        return this.pcb;
+    }
+     @Override
+    public void setPCB(PCB pcb ){
+        this.pcb = pcb;
+        
+    }
+    
     public ArrayList<Integer>  getValues(){
         return this.values;
     }

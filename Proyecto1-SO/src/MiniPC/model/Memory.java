@@ -166,14 +166,18 @@ public class Memory {
         pcb.setMemoryStartingIndex(this.currentIndex);
         for(int i = 0 ; i < pcbData.size(); i ++){
             Register infoRegister = new InformationRegister();
+            infoRegister.setPCB(pcb);
+            
+            
             infoRegister.setValue(pcbData.get(i));
             this.registers.set(this.currentIndex,Optional.of(infoRegister));
             this.currentIndex++;
         }
         pcb.setProgramCounter(this.currentIndex);
         for(int i = 0 ; i < instructions.size(); i ++){
-            Register memoryRegister = new MemoryRegister();
+            Register memoryRegister = new MemoryRegister();           
             memoryRegister = instructions.get(i);
+            memoryRegister.setPCB(pcb);
             this.registers.set(this.currentIndex,Optional.of(memoryRegister));
             this.currentIndex++;
         }
@@ -191,34 +195,7 @@ public class Memory {
         return this.allocationIndex;
     }
     
-    public void allocate(ArrayList<MemoryRegister> instructions){
-        //Inicia a partir del índice START_INDEX
-        Random rand = new Random();
-        int startAllocate = rand.nextInt(this.size);
-        while(startAllocate <this.START_INDEX) {
-            startAllocate++;
-            
-        }
-        while(this.spaceFull(startAllocate,instructions.size())){
-            startAllocate = rand.nextInt(this.size);
-            while(startAllocate <this.START_INDEX) {
-                startAllocate++;
-            
-            }
-            
-        }
-        
-        int j = 0;
-        this.allocationIndex = startAllocate;
-        //System.out.println(this.allocationIndex);
-        for(int i = startAllocate ; i <instructions.size()+startAllocate; i ++){
-            this.registers.add(i, Optional.of(instructions.get(j)));
-            j++;
-         }        
-        this.allocatedMemorySize = instructions.size();
-        
-        
-    }
+   
     public int geAllocatedMemorySize(){
         return this.allocatedMemorySize;
     }

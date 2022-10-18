@@ -10,11 +10,11 @@ import MiniPC.model.PCB;
 import MiniPC.model.Register;
 import MiniPC.view.ProcessManager;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.TimerTask;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,8 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -52,7 +52,7 @@ public class PCController {
     
     private javax.swing.JButton btnExeAll;
     private ArrayList<PCB> pcbList = new ArrayList<PCB>();
-    
+    private String algoritmoElegido ="SRT";
     private int keys = 0;
     
     public PCController(){
@@ -63,7 +63,7 @@ public class PCController {
     public void init(){
         this.loadApp();        
         
-        this.cpu1 = new CPU("CPU1","FCFS");        
+        this.cpu1 = new CPU("CPU1",algoritmoElegido);        
         this.btnStepByStep = this.app.getStepByStep();
         this.btnFileLoad = this.app.getLoadBtn();
         this.btnStats = this.app.getButtonStats();
@@ -108,7 +108,7 @@ public class PCController {
         this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
-        this.cpu1 = new CPU("CPU1","FCFS");
+        this.cpu1 = new CPU("CPU1",algoritmoElegido);
         
         
 
@@ -288,28 +288,105 @@ public class PCController {
     }
     
     
+    public int getIndexPCB(PCB pcb){
+        int i = 1;
     
-    public void loadPCBstoMem(){
-                             
-        int i =0;
-        for(Optional<Register> reg: this.memory.getInstructions()){
-            if(!reg.isEmpty()){
-                this.memoryTable.setValueAt(reg.get().toBinaryString(),i, 1);
+        for(PCB pcb1 : this.pcbList){
+            if(pcb.equals(pcb1)){
+                return i;
                 
-            } else {
-                this.memoryTable.setValueAt(" ",i, 1);                
             }
             i++;
-        }                         
-        int j =0;
-        for(Optional<Register> reg: this.disk.getInstructions()){
+        }
+        return i;
+    }
+    
+    public void loadPCBstoMem(){
+        
+    
+           
+//Color.cyan
+        //Color.LIGHT_GRAY          
+                
+        int i =0;
+        //if(this.memory.getInstructions().get(0).isEmpty()){return;} 
+        //int size1 = this.memory.getInstructions().get(0).get().getPCB().getPCBinstrucctionSize()+this.memory.getInstructions().get(0).get().getPCB().getPCBData().size();
+        int currentPCBs=0;// = this.getIndexPCB(this.memory.getInstructions().get(0).get().getPCB());
+        //this.memoryTable.setValueAt("Proceso "+this.getIndexPCB(this.memory.getInstructions().get(0).get().getPCB())+"("+size1+")",i, 1);
+        
+        String item = "-";
+        for(Optional<Register> reg: this.memory.getInstructions()){
+             
             if(!reg.isEmpty()){
-                this.app.getDiskTable().setValueAt(reg.get().toBinaryString(),j, 1);
+                 if(i==0){
+                currentPCBs = this.getIndexPCB(reg.get().getPCB());
+                int size = reg.get().getPCB().getPCBinstrucctionSize()+reg.get().getPCB().getPCBData().size();
+                this.memoryTable.setValueAt("Proceso "+item+this.getIndexPCB(reg.get().getPCB()) + "("+size+")",i, 1);
+                
+            } 
+                if(i!=0){this.memoryTable.setValueAt(item,i, 1);}
+                
+                if(this.getIndexPCB(reg.get().getPCB())!=currentPCBs){
+                    currentPCBs = this.getIndexPCB(reg.get().getPCB());
+                    if(item.equals("-")){
+                        item = "|";
+                    } else {
+                       item = "-";
+                        
+                    }
+                    int size = reg.get().getPCB().getPCBinstrucctionSize()+reg.get().getPCB().getPCBData().size();
+                    this.memoryTable.setValueAt("Proceso "+item+this.getIndexPCB(reg.get().getPCB()) + "("+size+")",i, 1);
+                    
+                }
+                
                 
             } else {
-                this.app.getDiskTable().setValueAt(" ",j, 1);                
+                this.memoryTable.setValueAt(null,i, 1);                
             }
-            j++;
+            i++;
+        }                 
+         i = 0;
+         
+         ///if(this.disk.getInstructions().get(0).isEmpty()){this.memoryTable.setValueAt(null,i, 1);    return;}
+         //size1 = this.disk.getInstructions().get(0).get().getPCB().getPCBinstrucctionSize()+this.disk.getInstructions().get(0).get().getPCB().getPCBData().size();
+        //currentPCBs = this.getIndexPCB(this.disk.getInstructions().get(0).get().getPCB());
+        //this.app.getDiskTable().setValueAt("Proceso "+this.getIndexPCB(this.disk.getInstructions().get(0).get().getPCB())+"("+size1+")",i, 1);
+        //i = i+1;
+         if(item.equals("-")){
+            item = "|";
+        } else {
+             item = "-";
+                        
+        }
+        for(Optional<Register> reg: this.disk.getInstructions()){
+           
+             if(!reg.isEmpty()){
+                  if(i==0){
+                currentPCBs = this.getIndexPCB(reg.get().getPCB());
+                int size = reg.get().getPCB().getPCBinstrucctionSize()+reg.get().getPCB().getPCBData().size();
+                this.app.getDiskTable().setValueAt("Proceso "+item+this.getIndexPCB(reg.get().getPCB()) + "("+size+")",i, 1);
+                
+            }   
+                 
+                if(i!=0){this.app.getDiskTable().setValueAt(item,i, 1);}
+                if(this.getIndexPCB(reg.get().getPCB())!=currentPCBs){
+                    currentPCBs = this.getIndexPCB(reg.get().getPCB());
+                    if(item.equals("-")){
+                        item = "|";
+                    } else {
+                       item = "-";
+                        
+                    }
+                    int size = reg.get().getPCB().getPCBinstrucctionSize()+reg.get().getPCB().getPCBData().size();
+                    this.app.getDiskTable().setValueAt("Proceso "+item+this.getIndexPCB(reg.get().getPCB()) + "("+size+")",i, 1);
+                    
+                }
+                
+                
+            } else {
+                this.app.getDiskTable().setValueAt(null,i, 1);                
+            }
+            i++;
         }                         
     }
     

@@ -9,7 +9,10 @@ package MiniPC.model;
  * @author ricardosoto
  */
 public interface Register {
+    
     void setValue(Integer value);
     Integer getValue();
     String toBinaryString();
+    PCB getPCB();
+    void setPCB(PCB pcb);
 }

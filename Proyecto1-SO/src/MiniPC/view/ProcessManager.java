@@ -347,7 +347,32 @@ public final class ProcessManager extends javax.swing.JFrame {
         txtAC1 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTableDisk = new javax.swing.JTable();
+        jTableDisk = new javax.swing.JTable(){
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                Object value = getModel().getValueAt(row,column);
+                if (value == null || column==0) {
+                    c.setBackground(Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                } else if (value=="|"){
+                    c.setBackground(Color.LIGHT_GRAY);
+                    c.setForeground(Color.LIGHT_GRAY);
+
+                } else if(value =="-") {
+                    c.setBackground(Color.cyan);
+                    c.setForeground(Color.cyan);
+                } else if(value.toString().substring(8, 9).equals("|")) {
+                    c.setBackground(Color.LIGHT_GRAY);
+                    c.setForeground(Color.BLACK);
+                } else {
+                    c.setBackground(Color.cyan);
+                    c.setForeground(Color.BLACK);
+                }
+
+                return c;
+            }
+        }
+        ;
         jLabel2 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -367,7 +392,32 @@ public final class ProcessManager extends javax.swing.JFrame {
         txtAC2 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTableMemory = new javax.swing.JTable();
+        jTableMemory = new javax.swing.JTable(){
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                Object value = getModel().getValueAt(row,column);
+                if (value == null || column==0) {
+                    c.setBackground(Color.WHITE);
+                    c.setForeground(Color.BLACK);
+                } else if (value=="|"){
+                    c.setBackground(Color.LIGHT_GRAY);
+                    c.setForeground(Color.LIGHT_GRAY);
+
+                } else if(value =="-") {
+                    c.setBackground(Color.cyan);
+                    c.setForeground(Color.cyan);
+                } else if(value.toString().substring(8, 9).equals("|")) {
+                    c.setBackground(Color.LIGHT_GRAY);
+                    c.setForeground(Color.BLACK);
+                } else {
+                    c.setBackground(Color.cyan);
+                    c.setForeground(Color.BLACK);
+                }
+
+                return c;
+            }
+        }
+        ;
         jPanel3 = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jInputKeyboard = new javax.swing.JTextField();
@@ -718,6 +768,7 @@ public final class ProcessManager extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
+
         ));
         jTableMemory.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         jScrollPane4.setViewportView(jTableMemory);

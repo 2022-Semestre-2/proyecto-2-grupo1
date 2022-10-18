@@ -344,7 +344,7 @@ public class PCB {
     public void setCPUMemory(String  path, int memSize){
         this.memory = new Memory(memSize);
         this.loader = new FileLoader(path);        
-            this.memory.allocate(loader.getInstrucionSet());
+            //this.memory.allocate(loader.getInstrucionSet());
     }
     public void executeAll(String  path, int memSize, PCController input){
         //this.memory = new Memory(memSize);

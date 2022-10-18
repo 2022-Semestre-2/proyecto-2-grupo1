@@ -10,7 +10,21 @@ package MiniPC.model;
  */
 public class InformationRegister implements Register {
     private Integer value;
+    private PCB pcb;
 
+
+
+       @Override
+     public PCB getPCB(){
+        return this.pcb;
+    }
+     @Override
+    public void setPCB(PCB pcb ){
+        this.pcb = pcb;
+        
+    }
+    
+    
     @Override
     public void setValue(Integer value) {
         this.value = value;

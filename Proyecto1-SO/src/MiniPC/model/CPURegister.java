@@ -10,9 +10,22 @@ package MiniPC.model;
  */
 public class CPURegister implements Register{
     private Integer value;
+    private PCB pcb;
+//    
+    
+    
     
     public CPURegister(Integer value){
         this.value = value;
+    }
+    @Override
+    public PCB getPCB(){
+        return this.pcb;
+    }
+    @Override
+    public void setPCB(PCB pcb ){
+        this.pcb = pcb;
+        
     }
 
     @Override
