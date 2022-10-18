@@ -437,9 +437,10 @@ public class PCController {
     private void btnStepActionPerformed(java.awt.event.ActionEvent evt) {                  
         //Coger un proceso y ejecutarlo en CPU|
         PCController c = this;
-        this.cpu1.executeInstructionAlgorithm (this.memory, this.disk,c);
+        boolean res = this.cpu1.executeInstructionAlgorithm (this.memory, this.disk,c);
         this.updatePCBStatusTable();
         this.loadPCBstoMem();
+        if(!res){return;}
         if(this.cpu1.getProcessInstructionIndex()!=0){
             this.app.getExecutionTables()[0].getModel().setValueAt(" ", this.cpu1.getCurrentProcessIndex(), this.cpu1.getProcessInstructionIndex());     
         }

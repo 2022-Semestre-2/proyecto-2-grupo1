@@ -106,13 +106,13 @@ public class CPU {
      //
 // Aquí ejecuta la instrucción pero todo es por defecto hasta que se cambie lo de memioria
 
-    public void executeInstructionAlgorithm(Memory memory,Memory disk, PCController cont){
+    public boolean executeInstructionAlgorithm(Memory memory,Memory disk, PCController cont){
         
         
         
         
         if(this.processQueue.isEmpty()){
-            return;
+            return false;
         }
         if(this.originalQueue==null){
             this.originalQueue = new LinkedList<PCB>();
@@ -128,7 +128,7 @@ public class CPU {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
         PCB pcb = this.algoritmo.executeInstruction(this.processQueue, cont);
         
-        
+        if(pcb==null){return false;}
         this.currentPcbRegistersStatus = this.algoritmo.getStatus();
         int i = 0 ;
         int index  = i;
@@ -140,19 +140,20 @@ public class CPU {
                 }
                 i++;
          }
+        
         this.currentProcessIndex = index;      
         System.out.println(index);
-        this.processInstructionIndex++;
+        this.processInstructionIndex =this.algoritmo.getTime()-1;
             
         if(algoritmo.programIsFinished()){
             this.processQueue.remove(pcb);
             pcb.setStatus("Fin");
-            memory.deallocatePCB(pcb);              
-            
+            memory.deallocatePCB(pcb);                          
             this.diskValidation(disk, memory);
             
             
        }
+        return true;
         
        
        
@@ -279,7 +280,8 @@ public class CPU {
         
             if(this.cpuName.equals("CPU1")){
                 
-                this.executeInstructionAlgorithm(memory, disk, cont);            
+                boolean res = this.executeInstructionAlgorithm(memory, disk, cont);            
+                if(!res){continue;}
 //                        
                 
                 cont.updatePCBStatusTable();

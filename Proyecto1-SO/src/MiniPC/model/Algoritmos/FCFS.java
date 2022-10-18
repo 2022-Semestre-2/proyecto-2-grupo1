@@ -64,14 +64,18 @@ public class FCFS implements Algoritmos{
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
         //ESTO ES PARTE DEL METODO POR DEFECTO, PROCUREN RETORNAR EL PCB que según el algoritmo se debe ejecutar
        PCB result =  this.currentPCB;     
-       
-       this.status = result.executeInstruction(cont);
-       if(this.currentPCB.programFinished()){   
-           this.programFinished = true;
-           this.procesosEsperando.remove(this.currentPCB);     
-           this.currentPCB = this.procesosEsperando.peek();
+            
+       if(result!=null){
+           this.status = result.executeInstruction(cont);
+            if(this.currentPCB.programFinished()){   
+                this.programFinished = true;
+                this.procesosEsperando.remove(this.currentPCB);     
+               this.currentPCB = this.procesosEsperando.peek();
            
+               }
        }
+       
+      
        
        this.currentTime++;
        return result;
@@ -86,6 +90,11 @@ public class FCFS implements Algoritmos{
     public ArrayList<String> getStatus(){
         return this.status;
     }        
+
+    @Override
+    public int getTime() {
+        return this.currentTime;
+    }
     
     
 }

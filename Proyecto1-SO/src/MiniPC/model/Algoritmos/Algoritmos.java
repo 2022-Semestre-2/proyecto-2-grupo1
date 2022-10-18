@@ -17,6 +17,7 @@ public interface Algoritmos {
     PCB executeInstruction(Queue<PCB> colaProcesos, PCController cont);
     boolean programIsFinished ();
     ArrayList<String> getStatus();
+    int getTime();
     
     
     

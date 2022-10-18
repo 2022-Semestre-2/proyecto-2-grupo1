@@ -48,10 +48,15 @@ public class SJF implements Algoritmos{
            if(proceso.getArrivalTime()<=this.currentTime && !this.procesosEsperando.contains(proceso)){   
                
               if(this.procesosEsperando.isEmpty()){
+                  
                    this.currentPCB = proceso;
+                   this.currentPCB.setStatus("Exec");
+                   
                }               
                this.procesosEsperando.add(proceso);
                //col.remove(proceso);
+               
+               
                
                
                
@@ -59,8 +64,13 @@ public class SJF implements Algoritmos{
         } 
         
         
+                
+        
+                
+        
         for(PCB proceso: this.procesosEsperando){
             if(proceso.getRafaga()<this.currentPCB.getRafaga()){
+                
                 this.currentPCB = proceso;
             }
         }
@@ -96,6 +106,11 @@ public class SJF implements Algoritmos{
     public ArrayList<String> getStatus(){
         return this.status;
     }        
+
+    @Override
+    public int getTime() {
+        return this.currentTime;
+    }
     
     
 }
