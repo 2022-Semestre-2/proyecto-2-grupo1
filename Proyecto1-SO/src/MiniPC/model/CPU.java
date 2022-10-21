@@ -44,10 +44,10 @@ public class CPU {
     public void initializeMapper(){
         this.hashAlgoritmos = new HashMap<>();
         //SRT y SJF los confundi entonces están al revés xdd
-        this.hashAlgoritmos.put("SRT", new SJF());
+        this.hashAlgoritmos.put("SRT", new SRT());
         this.hashAlgoritmos.put("RR", new RoundRobin());
         this.hashAlgoritmos.put("HRRN", new HRRN());
-        this.hashAlgoritmos.put("SJF", new SRT());
+        this.hashAlgoritmos.put("SJF", new SJF());
         this.hashAlgoritmos.put("FCFS", new FCFS());
     }
     public CPU(String name, String algoritmoAutilizar){
