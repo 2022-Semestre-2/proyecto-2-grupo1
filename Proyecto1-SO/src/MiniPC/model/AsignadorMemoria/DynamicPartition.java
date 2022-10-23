@@ -127,5 +127,10 @@ public class DynamicPartition implements AsignadorMemoria {
         this.memory.setCurrentIndex(newIndex);
         System.out.println("Final index: "+newIndex);
     }
+
+    @Override
+    public int getNextPC(PCB pcb) {
+        return pcb.getProgramCounter()+1;
+    }
     
 }

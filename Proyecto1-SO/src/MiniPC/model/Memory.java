@@ -86,6 +86,9 @@ public class Memory {
   
         
     }
+    public int getNextPC(PCB pcb ){
+        return this.memoryAsigner.getNextPC(pcb);
+    }
     
     
     

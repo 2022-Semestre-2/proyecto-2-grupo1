@@ -318,7 +318,7 @@ public class PCB {
             System.out.println("-------------------------------");           
            */
             
-            this.pc++;
+            this.pc = this.memory.getNextPC(this);
             this.currentInstruction++;
             this.rafaga--;
         

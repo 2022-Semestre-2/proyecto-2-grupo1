@@ -13,5 +13,6 @@ import MiniPC.model.PCB;
 public interface AsignadorMemoria {
     boolean allocatePCB(PCB pcb);
     void deallocatePCB(PCB pcb);
+    int getNextPC(PCB pcb);
     
 }
