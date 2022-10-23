@@ -4,10 +4,14 @@
  */
 package MiniPC.model;
 
+import MiniPC.model.AsignadorMemoria.AsignadorMemoria;
+import MiniPC.model.AsignadorMemoria.DynamicPartition;
+import MiniPC.model.AsignadorMemoria.FixedPartitioning;
+import MiniPC.model.AsignadorMemoria.Paging;
+import MiniPC.model.AsignadorMemoria.Segmentation;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Optional;
-import java.util.Random;
 
 /**
  *
@@ -18,7 +22,9 @@ public class Memory {
     private LinkedList<PCB> pcbs;
     private int size;    
     private ArrayList<Optional<Register>> registers;    
-    private final int START_INDEX = 10;
+    private int START_INDEX = 10;
+    private String method;
+    private AsignadorMemoria memoryAsigner;
     private int allocationIndex = 0;
     private int allocatedMemorySize = 0; 
     private int currentIndex = 0;
@@ -31,21 +37,41 @@ public class Memory {
         }        
         this.size = size;
         this.pcbs = new LinkedList<>();
+        this.setMethod("Particion Dinamica");
+        
+        switch (this.method) {
+            case "Particion Dinamica":
+                this.memoryAsigner = new DynamicPartition(this);
+                break;
+            case "Paginacion":
+                this.memoryAsigner  = new Paging(this);
+                break;
+            case "Particion Fija":                    
+                this.memoryAsigner  = new FixedPartitioning(this);
+                break;
+            case "Segmentacion":
+                this.memoryAsigner  = new Segmentation(this);
+                break;
+            default:
+                break;
+        }
     }
-    
+    public void setMethod(String m){
+        this.method = m;
+    }
     
     public ArrayList<Optional<Register>> getInstructions(){
-        return this.registers;
+        return this.getRegisters();
     }
     private boolean spaceFull(int startingIndex, int space){        
-        if(startingIndex + space > this.size){
+        if(startingIndex + space > this.getSize()){
                         
             
             return true;   
         }
-        if(this.registers.get(startingIndex).isEmpty()){
+        if(this.getRegisters().get(startingIndex).isEmpty()){
             for(int i = startingIndex ; i < space; i ++){
-                if(this.registers.get(i).isPresent()){                    
+                if(this.getRegisters().get(i).isPresent()){                    
                     
                     return true;
                 }
@@ -55,85 +81,20 @@ public class Memory {
         
     }
     public void deallocatePCB(PCB pcb){
-        int index = pcb.getMemoryStartingIndex();
-        int tamannioPcb = pcb.getInstructions().size()+pcb.getPCBData().size();      
-               
-        
-        System.out.println("start toDElPCB index: "+index);
-        for(int i = 0 ; i < tamannioPcb; i++){                
-            this.registers.remove(index);            
-            
-        }
-        
-        
-        //se busca el PCB siguiente        
-        PCB nextProcessToExe= null;
-        PCB current = pcb;        
-        
-        int k = 0;        
-        //pcb i = 0 ==
-        //pcb2 i = 1 == 
-        //curr = nextProcessToexe = pcb2
-        //k=1
-        //
-        for(int i = 0 ; i < this.pcbs.size(); i++){
-            if(this.pcbs.get(i).equals(pcb)){                
-                try{                                        
-                    nextProcessToExe  = this.pcbs.get(i+1);                    
-                    nextProcessToExe.setProgramCounter(current.getMemoryStartingIndex()+nextProcessToExe.getPCBData().size());                    
-                    nextProcessToExe.setMemoryStartingIndex(current.getMemoryStartingIndex());                                                                                                                           
-                   
-                    current = nextProcessToExe;                    
-                    k = i+1;
-                    break;
-                } catch(IndexOutOfBoundsException e){
-                    k=i+1;
-                    break;
-                }
-                
-            }
-        }
-       
-        for(int r = k ;r < this.pcbs.size(); r++){
-            try{                                        
-                nextProcessToExe  = this.pcbs.get(r+1); 
-                int finalIndexCurr = current.getMemoryStartingIndex()+current.getPCBData().size()+current.getInstructions().size();
-                nextProcessToExe.setProgramCounter(finalIndexCurr+nextProcessToExe.getPCBData().size());                    
-                nextProcessToExe.setMemoryStartingIndex(finalIndexCurr);                                                                                                                           
-                current = nextProcessToExe;              
-            } catch(IndexOutOfBoundsException e){
-                    
-            }
-        }
-        this.pcbs.remove(pcb);
-        
-        
-        
-                    
-        
-        //Se agrega al final de los reigstros la memoria liberada
-        for(int j = 0 ; j < tamannioPcb; j++){
-            registers.add(Optional.empty());                 
-        }
-        int newIndex = 0;
-        while(this.registers.get(newIndex).isPresent()){
-            newIndex++;
-        } 
-        this.currentIndex = newIndex;
-        System.out.println("Final index: "+newIndex);
-       
-       
-        
-                
-        
+        this.memoryAsigner.deallocatePCB(pcb);
+     
+  
         
     }
+    
+    
+    
     public void printMemory(){
         System.out.println("Memory printing....");
-        for(int i = 0 ;i < this.registers.size(); i ++){
-            if(this.registers.get(i).isPresent()){
+        for(int i = 0 ;i < this.getRegisters().size(); i ++){
+            if(this.getRegisters().get(i).isPresent()){
                 
-                System.out.println(this.registers.get(i).get().toBinaryString());
+                System.out.println(this.getRegisters().get(i).get().toBinaryString());
             }
         }
     }
@@ -142,54 +103,29 @@ public class Memory {
         ArrayList<MemoryRegister> instructions = pcb.getLoader().getInstrucionSet();
         //El PC
        
-        return this.currentIndex+pcbData.size()+instructions.size() <=this.size;
+        return this.getCurrentIndex()+pcbData.size()+instructions.size() <=this.getSize();
             //Error por desbordamiento de memoria
             
         
     }
     public LinkedList<PCB> getProcessesLoaded(){
-        return this.pcbs;
-    }
-    public boolean allocatePCB(PCB pcb){
-        if(pcb==null){
-            return false;
-        }
-        ArrayList<Integer> pcbData = pcb.getPCBData();
-        ArrayList<MemoryRegister> instructions = pcb.getLoader().getInstrucionSet();
-        //El PC
-       
-        if(this.currentIndex+pcbData.size()+instructions.size() >this.size){                    
-            //Error por desbordamiento de memoria
-            return false;
-        }
-        
-        pcb.setMemoryStartingIndex(this.currentIndex);
-        for(int i = 0 ; i < pcbData.size(); i ++){
-            Register infoRegister = new InformationRegister();
-            infoRegister.setPCB(pcb);
-            
-            
-            infoRegister.setValue(pcbData.get(i));
-            this.registers.set(this.currentIndex,Optional.of(infoRegister));
-            this.currentIndex++;
-        }
-        pcb.setProgramCounter(this.currentIndex);
-        for(int i = 0 ; i < instructions.size(); i ++){
-            Register memoryRegister = new MemoryRegister();           
-            memoryRegister = instructions.get(i);
-            memoryRegister.setPCB(pcb);
-            this.registers.set(this.currentIndex,Optional.of(memoryRegister));
-            this.currentIndex++;
-        }
-        pcb.setMemory(this);        
-        this.pcbs.add(pcb);
-        return true;
-        
-        
+        return this.getPcbs();
     }
     
+    public boolean allocatePCB(PCB pcb){
+     
+     return this.memoryAsigner.allocatePCB(pcb);
+       
+    }
+    
+    
+    
+    
+    
+    
+    
     public void clean(){
-       this.registers.clear();       
+        this.getRegisters().clear();       
     }
     public int getAllocationIndex(){
         return this.allocationIndex;
@@ -197,11 +133,102 @@ public class Memory {
     
    
     public int geAllocatedMemorySize(){
-        return this.allocatedMemorySize;
+        return this.getAllocatedMemorySize();
     }
 
     public int getSize() {
         return size;
+    }
+
+    /**
+     * @return the pcbs
+     */
+    public LinkedList<PCB> getPcbs() {
+        return pcbs;
+    }
+
+    /**
+     * @param pcbs the pcbs to set
+     */
+    public void setPcbs(LinkedList<PCB> pcbs) {
+        this.pcbs = pcbs;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    /**
+     * @return the registers
+     */
+    public ArrayList<Optional<Register>> getRegisters() {
+        return registers;
+    }
+
+    /**
+     * @param registers the registers to set
+     */
+    public void setRegisters(ArrayList<Optional<Register>> registers) {
+        this.registers = registers;
+    }
+
+    /**
+     * @return the START_INDEX
+     */
+    public int getSTART_INDEX() {
+        return START_INDEX;
+    }
+
+    /**
+     * @param START_INDEX the START_INDEX to set
+     */
+    public void setSTART_INDEX(int START_INDEX) {
+        this.START_INDEX = START_INDEX;
+    }
+
+    /**
+     * @return the method
+     */
+    public String getMethod() {
+        return method;
+    }
+
+    /**
+     * @param allocationIndex the allocationIndex to set
+     */
+    public void setAllocationIndex(int allocationIndex) {
+        this.allocationIndex = allocationIndex;
+    }
+
+    /**
+     * @return the allocatedMemorySize
+     */
+    public int getAllocatedMemorySize() {
+        return allocatedMemorySize;
+    }
+
+    /**
+     * @param allocatedMemorySize the allocatedMemorySize to set
+     */
+    public void setAllocatedMemorySize(int allocatedMemorySize) {
+        this.allocatedMemorySize = allocatedMemorySize;
+    }
+
+    /**
+     * @return the currentIndex
+     */
+    public int getCurrentIndex() {
+        return currentIndex;
+    }
+
+    /**
+     * @param currentIndex the currentIndex to set
+     */
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
     }
     
     

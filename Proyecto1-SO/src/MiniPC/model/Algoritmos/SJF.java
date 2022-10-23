@@ -27,10 +27,10 @@ public class SJF implements Algoritmos{
     
     public SJF(){
         
-        this.currentTime = 0;
+        this.currentTime = 1;
         this.procesosEsperando = new LinkedList<PCB>();
         this.programFinished = false;
-        this.currentTimeAux= 0;
+        this.currentTimeAux= 1;
         
         
     }
