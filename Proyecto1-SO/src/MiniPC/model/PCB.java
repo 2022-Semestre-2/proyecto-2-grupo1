@@ -330,6 +330,10 @@ public class PCB {
             
     }
         
+
+    public int getCurrentInstruction() {
+        return currentInstruction;
+    }
     public int getPCBinstrucctionSize(){
         return this.loader.getInstrucionSet().size();
     }

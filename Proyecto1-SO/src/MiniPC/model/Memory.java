@@ -37,7 +37,8 @@ public class Memory {
         }        
         this.size = size;
         this.pcbs = new LinkedList<>();
-        this.setMethod("Particion Dinamica");
+        //this.setMethod("Particion Dinamica");
+        this.setMethod("Paginacion");
         
         switch (this.method) {
             case "Particion Dinamica":
@@ -89,6 +90,15 @@ public class Memory {
     public int getNextPC(PCB pcb ){
         return this.memoryAsigner.getNextPC(pcb);
     }
+    public int getFreeSpaceCount(){
+        int i = 0 ; 
+        for(Optional<Register> reg: this.registers ){
+            if(reg.isEmpty()){
+                i++;
+            }
+        }
+        return i;
+    }
     
     
     
@@ -106,7 +116,7 @@ public class Memory {
         ArrayList<MemoryRegister> instructions = pcb.getLoader().getInstrucionSet();
         //El PC
        
-        return this.getCurrentIndex()+pcbData.size()+instructions.size() <=this.getSize();
+        return pcbData.size()+instructions.size()<=this.getFreeSpaceCount();
             //Error por desbordamiento de memoria
             
         
