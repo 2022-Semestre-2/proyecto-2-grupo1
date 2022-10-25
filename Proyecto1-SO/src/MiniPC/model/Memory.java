@@ -38,7 +38,8 @@ public class Memory {
         this.size = size;
         this.pcbs = new LinkedList<>();
         //this.setMethod("Particion Dinamica");
-        this.setMethod("Paginacion");
+        //this.setMethod("Paginacion");
+        this.setMethod("Particion Fija");
         
         switch (this.method) {
             case "Particion Dinamica":
