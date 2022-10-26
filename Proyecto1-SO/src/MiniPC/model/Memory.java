@@ -38,8 +38,8 @@ public class Memory {
         this.size = size;
         this.pcbs = new LinkedList<>();
         //this.setMethod("Particion Dinamica");
-        //this.setMethod("Paginacion");
-        this.setMethod("Particion Fija");
+        this.setMethod("Paginacion");
+        //this.setMethod("Particion Fija");
         
         switch (this.method) {
             case "Particion Dinamica":
@@ -116,7 +116,10 @@ public class Memory {
         ArrayList<Integer> pcbData = pcb.getPCBData();
         ArrayList<MemoryRegister> instructions = pcb.getLoader().getInstrucionSet();
         //El PC
-       
+       if(this.method.equals("Paginacion")){
+           Paging mem = (Paging)this.memoryAsigner;
+           return mem.fitsInFrames(pcb);
+       }
         return pcbData.size()+instructions.size()<=this.getFreeSpaceCount();
             //Error por desbordamiento de memoria
             

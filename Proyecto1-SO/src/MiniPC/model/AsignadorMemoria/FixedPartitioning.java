@@ -52,7 +52,7 @@ public class FixedPartitioning implements AsignadorMemoria{
         
         
         
-        int currentIndex= 0;
+        
         int k = 0;
         int now = this.partitionSize*this.count;
         
