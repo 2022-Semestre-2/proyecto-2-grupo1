@@ -21,13 +21,13 @@ public class FixedPartitioning implements AsignadorMemoria{
 
     
     private Memory memory;
-    private int partitionSize = 10;
+    private int partitionSize = 0;
     private int index = 0;
     private int count = 0;
 
-    public FixedPartitioning(Memory mem){
+    public FixedPartitioning(Memory mem, int particion){
         this.memory = mem;
-        
+        this.partitionSize = particion;
     }
     @Override
     public boolean allocatePCB(PCB pcb) {

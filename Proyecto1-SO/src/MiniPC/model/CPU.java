@@ -56,7 +56,8 @@ public class CPU {
         this.cpuName = name;
         this.initializeMapper();
         this.algoritmo = this.hashAlgoritmos.get(algoritmoAutilizar);
-        
+        System.out.println(algoritmoAutilizar);
+        System.out.println(algoritmoAutilizar);
         //this.loadPCBSArrival();
         
     }
@@ -126,6 +127,7 @@ public class CPU {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
+        System.out.println(this.algoritmo);
         PCB pcb = this.algoritmo.executeInstruction(this.processQueue, cont);
         
         if(pcb==null){return false;}

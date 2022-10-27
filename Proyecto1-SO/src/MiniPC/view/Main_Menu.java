@@ -215,7 +215,7 @@ public class Main_Menu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "El tamaño de memoria no es sufuciente para procesar el archivo","MiniPC", 0);
             return;
         }
-        cpu.setCPUMemory(this.file.getAbsolutePath(), size);
+        cpu.setCPUMemory(this.file.getAbsolutePath(), size, "bla", 0);
         this.setVisible(false);
         new CPU_Menu(this.cpu, this.file).setVisible(true);
         

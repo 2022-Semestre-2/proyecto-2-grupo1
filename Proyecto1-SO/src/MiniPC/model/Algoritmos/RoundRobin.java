@@ -20,7 +20,7 @@ public class RoundRobin implements Algoritmos{
     private Queue<PCB> procesosEsperando;
     private PCB currentPCB;
     private int currentTime;
-    private int currentTimeAux;
+    //private int currentTimeAux;
     private boolean programFinished;
     private ArrayList<String> status;
     
@@ -35,7 +35,7 @@ public class RoundRobin implements Algoritmos{
         this.currentTime = 1;
         this.procesosEsperando = new LinkedList<PCB>();
         this.programFinished = false;
-        this.currentTimeAux= 1;
+        //this.currentTimeAux= 1;
     }
     
     @Override
@@ -52,7 +52,7 @@ public class RoundRobin implements Algoritmos{
         for(PCB proceso: col){
            //los procesos llegan en el instante actual
       
-           if(proceso.getArrivalTime()<=this.currentTimeAux && !this.procesos.contains(proceso)){   
+           if(proceso.getArrivalTime()<=this.currentTime && !this.procesos.contains(proceso)){   
               //System.out.println("PCB->"+proceso.getFileName()+" entra a espera");
               if(this.procesos.isEmpty()){
                    this.currentPCB = proceso;
@@ -65,6 +65,7 @@ public class RoundRobin implements Algoritmos{
         
         //System.out.println("--Proccesos--");
         //System.out.println(procesos);
+        /*
         Collections.sort(procesos, new Comparator<PCB>() {
             @Override
             public int compare(PCB pcb1, PCB pcb2) {
@@ -77,13 +78,17 @@ public class RoundRobin implements Algoritmos{
                 return 0;
             }
         });
-        
+        */
         for(PCB proceso: procesos) {
             this.procesosEsperando.add(proceso);
             System.out.println("PBC: "+proceso.getFileName() +"RAFAGA:"+(proceso.getRafaga()));
         }
-        
-       if(this.processFinish == true){
+        //if(currentPCB.getRafaga() == 1 && procesos.size() == 2){
+           // this.currentPCB = this.procesos.get(contProcess);
+            //contProcess = 0;
+            //contQuantum = 0;
+        //}else{
+        if(this.processFinish == true){
            contQuantum =0;
            this.processFinish = false;
            this.currentPCB = this.procesos.get(contProcess);
@@ -106,7 +111,7 @@ public class RoundRobin implements Algoritmos{
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
                }else{*/
-                   contQuantum = 0;
+                    contQuantum = 0;
                     contProcess++;
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
@@ -114,6 +119,8 @@ public class RoundRobin implements Algoritmos{
                 
             }
        }
+       // }
+       
        
                 
         }
@@ -161,7 +168,7 @@ public class RoundRobin implements Algoritmos{
         //ESTO ES PARTE DEL METODO POR DEFECTO, PROCUREN RETORNAR EL PCB que según el algoritmo se debe ejecutar
        PCB result =  this.currentPCB;     
        
-       this.currentTimeAux += this.currentPCB.getPCBinstrucctionSize();
+       //this.currentTimeAux += this.currentPCB.getPCBinstrucctionSize();
        
        if(result!=null){
            this.status = result.executeInstruction(cont);

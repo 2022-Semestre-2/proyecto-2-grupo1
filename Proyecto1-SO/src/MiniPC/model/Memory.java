@@ -30,7 +30,8 @@ public class Memory {
     private int currentIndex = 0;
    
     
-    public Memory(int size){
+    
+    public Memory(int size, String asignacion, int particion){
         registers = new ArrayList<>();
         for(int i = 0 ; i <size ; i ++){
             registers.add(Optional.empty());                 
@@ -38,9 +39,9 @@ public class Memory {
         this.size = size;
         this.pcbs = new LinkedList<>();
         //this.setMethod("Particion Dinamica");
-        this.setMethod("Paginacion");
+        this.setMethod(asignacion);
         //this.setMethod("Particion Fija");
-        
+        System.out.println("ASIGNACION MEMORIA->"+asignacion);
         switch (this.method) {
             case "Particion Dinamica":
                 this.memoryAsigner = new DynamicPartition(this);
@@ -49,7 +50,7 @@ public class Memory {
                 this.memoryAsigner  = new Paging(this);
                 break;
             case "Particion Fija":                    
-                this.memoryAsigner  = new FixedPartitioning(this);
+                this.memoryAsigner  = new FixedPartitioning(this, particion);
                 break;
             case "Segmentacion":
                 this.memoryAsigner  = new Segmentation(this);
@@ -58,6 +59,13 @@ public class Memory {
                 break;
         }
     }
+    
+    
+    
+    
+    
+    
+    
     public void setMethod(String m){
         this.method = m;
     }

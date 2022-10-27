@@ -48,12 +48,12 @@ public class PCController {
     //Botones que consultan los PCB's
     private javax.swing.JButton btnStepByStep;
     private javax.swing.JButton btnStats;
+    private javax.swing.JButton btnSaveConfig;
     
     private javax.swing.JButton btnExeAll;
     private ArrayList<PCB> pcbList = new ArrayList<PCB>();
-    private String algoritmoElegido ="SRT";
     private int keys = 0;
-    
+    private int partition = 0;
     public PCController(){
         //Cola                     
         
@@ -62,9 +62,10 @@ public class PCController {
     public void init(){
         this.loadApp();        
         
-        this.cpu1 = new CPU("CPU1",algoritmoElegido);        
+        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido());        
         this.btnStepByStep = this.app.getStepByStep();
         this.btnFileLoad = this.app.getLoadBtn();
+        this.btnSaveConfig = this.app.getSaveConfig();
         this.btnStats = this.app.getButtonStats();
         this.memoryTable = app.getJTableMemory();
         this.diskTable = app.getJTableDisk();
@@ -97,20 +98,57 @@ public class PCController {
             }
         });
         
-        this.memory = new Memory(app.getMemSize());
-        this.disk = new Memory(app.getDiskSize());
+        this.app.getSaveConfig().addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveConfig(evt);
+            }
+        });
+        
+        //this.memory = new Memory(app.getMemSize(), this.app.getAsignacionElegida());
+        //this.disk = new Memory(app.getDiskSize(), this.app.getAsignacionElegida());
     }
     public void btnClear(java.awt.event.ActionEvent evt) { 
-        this.memory = new Memory(app.getMemSize());
-        this.disk = new Memory(app.getDiskSize());
+        this.memory = new Memory(app.getMemSize(), this.app.getAsignacionElegida(), this.partition);
+        this.disk = new Memory(app.getDiskSize(), this.app.getAsignacionElegida(), this.partition);
         
         this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
-        this.cpu1 = new CPU("CPU1",algoritmoElegido);
+        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido());
         
         
 
+    }
+    
+    public void btnSaveConfig(java.awt.event.ActionEvent evt) { 
+        
+        String algoritmo = this.app.getCBPlanificacion().getSelectedItem().toString();
+        String asignacion = this.app.getCBAsignacion().getSelectedItem().toString();
+        
+        if (algoritmo == "RR") {
+            int roundrobin = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el parametro del Round Robin", JOptionPane.INFORMATION_MESSAGE));
+        }
+        
+        if (algoritmo == "Paginacion") {
+            int frame = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de página/frame", JOptionPane.INFORMATION_MESSAGE));
+        }
+        
+        if (asignacion == "Particion Fija") {
+            this.partition = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de la particion fija", JOptionPane.INFORMATION_MESSAGE));
+        }
+        
+        
+        
+        this.memory = new Memory(app.getMemSize(), asignacion, partition);
+        this.disk = new Memory(app.getDiskSize(), asignacion, partition);
+        //this.app.reset();
+        this.pcbList.clear();
+        updatePCBStatusTable();
+        this.cpu1 = new CPU("CPU1",algoritmo);
+        System.out.println("SAVE");
+        System.out.println(algoritmo);
+        System.out.println(asignacion);
+        System.out.println("/SAVE");
     }
     
     public void btnStats(java.awt.event.ActionEvent evt) {

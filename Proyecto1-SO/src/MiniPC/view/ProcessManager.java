@@ -15,6 +15,7 @@ import java.io.FileReader;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -41,6 +42,17 @@ public final class ProcessManager extends javax.swing.JFrame {
     private PCController PC = new PCController();
     int input = 0;
     
+    
+    String algoritmoElegido;
+    String asignacionElegida;
+    
+    int roundRobinParametro = 0;
+    int particion = 0;
+    
+    
+    
+    
+    
     /**
      * Creates new form ProcessManager
      */
@@ -53,6 +65,8 @@ public final class ProcessManager extends javax.swing.JFrame {
         loadProcessTable();
         loadCPU2Table();
         loadKeyboardTable();
+        this.algoritmoElegido = jcbPlanificacion.getSelectedItem().toString();
+        this.asignacionElegida = jcbAsignacion.getSelectedItem().toString();
     }
       public void reset(){
           int i,j;
@@ -321,7 +335,8 @@ public final class ProcessManager extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btnClear = new javax.swing.JButton();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        btnSaveConfig = new javax.swing.JButton();
         btnExecute = new javax.swing.JButton();
         btnStepByStep = new javax.swing.JButton();
         btnStats = new javax.swing.JButton();
@@ -456,6 +471,12 @@ public final class ProcessManager extends javax.swing.JFrame {
 
             }
         };
+        jLabel19 = new javax.swing.JLabel();
+        jcbAsignacion = new javax.swing.JComboBox<>();
+        jcbPlanificacion = new javax.swing.JComboBox<>();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        btnClear1 = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -475,12 +496,12 @@ public final class ProcessManager extends javax.swing.JFrame {
         setBackground(java.awt.Color.blue);
         setExtendedState(0);
 
-        btnClear.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
-        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/clean.png"))); // NOI18N
-        btnClear.setText("Limpiar");
-        btnClear.addActionListener(new java.awt.event.ActionListener() {
+        btnSaveConfig.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        btnSaveConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/clean.png"))); // NOI18N
+        btnSaveConfig.setText("Guardar");
+        btnSaveConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearActionPerformed(evt);
+                btnSaveConfigActionPerformed(evt);
             }
         });
 
@@ -869,6 +890,28 @@ public final class ProcessManager extends javax.swing.JFrame {
         jTableProcessExecution1.setShowGrid(true);
         jScrollPane8.setViewportView(jTableProcessExecution1);
 
+        jLabel19.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel19.setText("Planificación");
+
+        jcbAsignacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Particion Dinamica", "Segmentacion", "Particion Fija", "Paginacion" }));
+
+        jcbPlanificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SRT", "SJF", "RR", "HRRN" }));
+
+        jLabel20.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel20.setText("Configuración");
+
+        jLabel23.setFont(new java.awt.Font("Inter", 1, 14)); // NOI18N
+        jLabel23.setText("Asignación");
+
+        btnClear1.setFont(new java.awt.Font("Inter", 0, 12)); // NOI18N
+        btnClear1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imgs/clean.png"))); // NOI18N
+        btnClear1.setText("Limpiar");
+        btnClear1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClear1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -879,20 +922,41 @@ public final class ProcessManager extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btmLoad)
-                                .addGap(58, 58, 58))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel23)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jcbAsignacion, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(0, 1, Short.MAX_VALUE)
+                                        .addComponent(jLabel19)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jcbPlanificacion, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(38, 38, 38))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
+                                        .addGap(31, 31, 31)
+                                        .addComponent(btmLoad))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(70, 70, 70)
+                                        .addComponent(jLabel20))
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGap(58, 58, 58)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnStepByStep)
-                                            .addComponent(btnStats)
-                                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addComponent(btnClear1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(btnExecute, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnStepByStep, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(btnStats))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(58, 58, 58)
+                                        .addComponent(btnSaveConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -918,7 +982,7 @@ public final class ProcessManager extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 922, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 8, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -938,8 +1002,9 @@ public final class ProcessManager extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(btmLoad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnStepByStep, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -948,14 +1013,26 @@ public final class ProcessManager extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnStats, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(50, 50, 50)
+                        .addComponent(btnClear1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcbPlanificacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcbAsignacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSaveConfig, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(152, 152, 152)))
+                        .addGap(36, 36, 36)))
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
@@ -983,13 +1060,19 @@ public final class ProcessManager extends javax.swing.JFrame {
         jTableKeyboard.setValueAt(evt.getActionCommand(), this.keys, 0);
     }//GEN-LAST:event_jInputKeyboardActionPerformed
 
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
+    private void btnSaveConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveConfigActionPerformed
+        
+       
+            
+    }//GEN-LAST:event_btnSaveConfigActionPerformed
 
     private void btnStatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStatsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnStatsActionPerformed
+
+    private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClear1ActionPerformed
 
     public javax.swing.JButton getStepByStep(){
         return this.btnStepByStep;
@@ -998,7 +1081,22 @@ public final class ProcessManager extends javax.swing.JFrame {
         return this.btnExecute;
     }
     public javax.swing.JButton getButtonClear(){
-        return this.btnClear;
+        return this.btnClear1;
+    }
+    
+    
+    public javax.swing.JComboBox getCBPlanificacion(){
+        return this.jcbPlanificacion;
+    }
+    
+    public javax.swing.JComboBox getCBAsignacion(){
+        return this.jcbAsignacion;
+    }
+    
+    
+    
+    public javax.swing.JButton getSaveConfig(){
+        return this.btnSaveConfig;
     }
     
     public javax.swing.JButton getButtonStats(){
@@ -1020,6 +1118,27 @@ public final class ProcessManager extends javax.swing.JFrame {
     public void setKeys(int k){
         this.keys = k;
     }
+
+    public String getAlgoritmoElegido() {
+        return algoritmoElegido;
+    }
+
+    public String getAsignacionElegida() {
+        return asignacionElegida;
+    }
+
+    public int getRoundRobinParametro() {
+        return roundRobinParametro;
+    }
+
+    public int getParticion() {
+        return particion;
+    }
+    
+    
+    
+    
+    
     
         
     /**
@@ -1082,10 +1201,12 @@ public final class ProcessManager extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btmLoad;
-    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnClear1;
     private javax.swing.JButton btnExecute;
+    private javax.swing.JButton btnSaveConfig;
     private javax.swing.JButton btnStats;
     private javax.swing.JButton btnStepByStep;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField jInputKeyboard;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1097,7 +1218,10 @@ public final class ProcessManager extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1124,6 +1248,8 @@ public final class ProcessManager extends javax.swing.JFrame {
     private javax.swing.JTable jTableProcess;
     private javax.swing.JTable jTableProcessExecution;
     private javax.swing.JTable jTableProcessExecution1;
+    private javax.swing.JComboBox<String> jcbAsignacion;
+    private javax.swing.JComboBox<String> jcbPlanificacion;
     private javax.swing.JLabel txtAC1;
     private javax.swing.JLabel txtAC2;
     private javax.swing.JLabel txtAX1;
