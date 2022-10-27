@@ -45,17 +45,21 @@ public class CPU {
         this.hashAlgoritmos = new HashMap<>();
         //SRT y SJF los confundi entonces están al revés xdd
         this.hashAlgoritmos.put("SRT", new SRT());
-        this.hashAlgoritmos.put("RR", new RoundRobin());
+        //this.hashAlgoritmos.put("RR", new RoundRobin());
         this.hashAlgoritmos.put("HRRN", new HRRN());
         this.hashAlgoritmos.put("SJF", new SJF());
         this.hashAlgoritmos.put("FCFS", new FCFS());
     }
-    public CPU(String name, String algoritmoAutilizar){
+    public CPU(String name, String algoritmoAutilizar, int roundrobin){
         this.currentProcessIndex = 0;
         this.processInstructionIndex = 0;
         this.cpuName = name;
         this.initializeMapper();
-        this.algoritmo = this.hashAlgoritmos.get(algoritmoAutilizar);
+        if (roundrobin>0) {
+            this.algoritmo = new RoundRobin(roundrobin);
+        } else {
+            this.algoritmo = this.hashAlgoritmos.get(algoritmoAutilizar);   
+        }
         System.out.println(algoritmoAutilizar);
         System.out.println(algoritmoAutilizar);
         //this.loadPCBSArrival();

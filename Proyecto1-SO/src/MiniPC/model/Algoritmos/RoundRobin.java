@@ -31,7 +31,8 @@ public class RoundRobin implements Algoritmos{
     private boolean processFinish = false;
     
     
-    public RoundRobin(){
+    public RoundRobin(int quantum){
+        this.quantum = quantum;
         this.currentTime = 1;
         this.procesosEsperando = new LinkedList<PCB>();
         this.programFinished = false;

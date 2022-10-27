@@ -55,6 +55,7 @@ public class PCController {
     private String algoritmoElegido ="RR";
     private int keys = 0;
     private int partition = 0;
+    private int roundrobin = 0;
     public PCController(){
         //Cola                     
         
@@ -63,7 +64,7 @@ public class PCController {
     public void init(){
         this.loadApp();        
         
-        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido());        
+        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido(), this.app.getRoundRobinParametro());        
         this.btnStepByStep = this.app.getStepByStep();
         this.btnFileLoad = this.app.getLoadBtn();
         this.btnSaveConfig = this.app.getSaveConfig();
@@ -115,7 +116,7 @@ public class PCController {
         this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
-        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido());
+        this.cpu1 = new CPU("CPU1",this.app.getAlgoritmoElegido(), this.app.getRoundRobinParametro());
         
         
 
@@ -127,7 +128,7 @@ public class PCController {
         String asignacion = this.app.getCBAsignacion().getSelectedItem().toString();
         
         if (algoritmo == "RR") {
-            int roundrobin = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el parametro del Round Robin", JOptionPane.INFORMATION_MESSAGE));
+            this.roundrobin = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el parametro del Round Robin", JOptionPane.INFORMATION_MESSAGE));
         }
         
         if (algoritmo == "Paginacion") {
@@ -145,7 +146,7 @@ public class PCController {
         //this.app.reset();
         this.pcbList.clear();
         updatePCBStatusTable();
-        this.cpu1 = new CPU("CPU1",algoritmo);
+        this.cpu1 = new CPU("CPU1",algoritmo, roundrobin);
         System.out.println("SAVE");
         System.out.println(algoritmo);
         System.out.println(asignacion);
