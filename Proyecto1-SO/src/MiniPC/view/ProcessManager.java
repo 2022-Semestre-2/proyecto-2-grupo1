@@ -894,6 +894,11 @@ public final class ProcessManager extends javax.swing.JFrame {
         jLabel19.setText("Planificación");
 
         jcbAsignacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Particion Dinamica", "Segmentacion", "Particion Fija", "Paginacion" }));
+        jcbAsignacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbAsignacionActionPerformed(evt);
+            }
+        });
 
         jcbPlanificacion.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "FCFS", "SRT", "SJF", "RR", "HRRN" }));
 
@@ -1073,6 +1078,10 @@ public final class ProcessManager extends javax.swing.JFrame {
     private void btnClear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClear1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnClear1ActionPerformed
+
+    private void jcbAsignacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbAsignacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbAsignacionActionPerformed
 
     public javax.swing.JButton getStepByStep(){
         return this.btnStepByStep;

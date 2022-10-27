@@ -26,12 +26,12 @@ public class Paging implements AsignadorMemoria {
     private ArrayList<Frame> frames;
     private int cantidadFrames ;
     
-    public Paging(Memory mem){
+    public Paging(Memory mem,int frame){
         this.memory = mem;
         this.pageTable = new HashMap<>();
         this.pageSize = 1;
         //El número de página no importa en este caso, lo que importa es el tamaño de los frames, es ajustable
-        this.frameSize = 7;
+        this.frameSize = frame;
         this.pageIndex = 0;
         this.frames = new ArrayList<>();
         int start=0;

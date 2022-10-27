@@ -47,7 +47,7 @@ public class Memory {
                 this.memoryAsigner = new DynamicPartition(this);
                 break;
             case "Paginacion":
-                this.memoryAsigner  = new Paging(this);
+                this.memoryAsigner  = new Paging(this,particion);
                 break;
             case "Particion Fija":                    
                 this.memoryAsigner  = new FixedPartitioning(this, particion);

@@ -49,6 +49,7 @@ public class PCController {
     private javax.swing.JButton btnStepByStep;
     private javax.swing.JButton btnStats;
     private javax.swing.JButton btnSaveConfig;
+    private boolean btnSaveClicked = false;
     
     private javax.swing.JButton btnExeAll;
     private ArrayList<PCB> pcbList = new ArrayList<PCB>();
@@ -102,6 +103,7 @@ public class PCController {
         
         this.app.getSaveConfig().addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+                
                 btnSaveConfig(evt);
             }
         });
@@ -123,19 +125,24 @@ public class PCController {
     }
     
     public void btnSaveConfig(java.awt.event.ActionEvent evt) { 
-        
+        this.btnSaveClicked = true;
         String algoritmo = this.app.getCBPlanificacion().getSelectedItem().toString();
         String asignacion = this.app.getCBAsignacion().getSelectedItem().toString();
-        
+        if(algoritmo.equals("")){
+            algoritmo = "FCFS";
+        }
+        if(asignacion.equals("")){
+            asignacion = "Particion Dinamica";
+        }
         if (algoritmo == "RR") {
             this.roundrobin = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el parametro del Round Robin", JOptionPane.INFORMATION_MESSAGE));
         }
         
-        if (algoritmo == "Paginacion") {
-            int frame = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de página/frame", JOptionPane.INFORMATION_MESSAGE));
+        else if (asignacion.equals("Paginacion")) {
+            this.partition = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de página/frame", JOptionPane.INFORMATION_MESSAGE));
         }
         
-        if (asignacion == "Particion Fija") {
+        else  if (asignacion.equals("Particion Fija")) {
             this.partition = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de la particion fija", JOptionPane.INFORMATION_MESSAGE));
         }
         
@@ -433,7 +440,11 @@ public class PCController {
     }
     
     
-    private void btmLoadActionPerformed(java.awt.event.ActionEvent evt) {                                        
+    private void btmLoadActionPerformed(java.awt.event.ActionEvent evt) {      
+        if(!this.btnSaveClicked){
+                   JOptionPane.showMessageDialog(this.app, "Debe de guardar la configuración antes de cargar archivos\n","MiniPC", 0);
+                   return;
+             }
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
 
