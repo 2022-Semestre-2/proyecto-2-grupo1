@@ -25,7 +25,7 @@ public class RoundRobin implements Algoritmos{
     private ArrayList<String> status;
     
     private ArrayList<PCB> procesos = new ArrayList<PCB>();
-    private int quantum = 1;
+    private int quantum = 5;
     private int contProcess = 0;
     private int contQuantum = 0;
     private boolean processFinish = false;
@@ -82,8 +82,11 @@ public class RoundRobin implements Algoritmos{
             this.procesosEsperando.add(proceso);
             System.out.println("PBC: "+proceso.getFileName() +"RAFAGA:"+(proceso.getRafaga()));
         }
-        
-       if(this.processFinish == true){
+        if(currentPCB.getRafaga() == 1 && procesos.size() == 2){
+            contProcess = 0;
+            contQuantum = 0;
+        }else{
+        if(this.processFinish == true){
            contQuantum =0;
            this.processFinish = false;
            this.currentPCB = this.procesos.get(contProcess);
@@ -106,7 +109,7 @@ public class RoundRobin implements Algoritmos{
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
                }else{*/
-                   contQuantum = 0;
+                    contQuantum = 0;
                     contProcess++;
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
@@ -114,6 +117,8 @@ public class RoundRobin implements Algoritmos{
                 
             }
        }
+        }
+       
        
                 
         }
