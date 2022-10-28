@@ -25,7 +25,7 @@ public class RoundRobin implements Algoritmos{
     private ArrayList<String> status;
     
     private ArrayList<PCB> procesos = new ArrayList<PCB>();
-    private int quantum = 1;
+    private int quantum = 3;
     private int contProcess = 0;
     private int contQuantum = 0;
     private boolean processFinish = false;

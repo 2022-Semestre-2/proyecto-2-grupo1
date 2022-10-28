@@ -52,6 +52,7 @@ public class PCController {
     
     private javax.swing.JButton btnExeAll;
     private ArrayList<PCB> pcbList = new ArrayList<PCB>();
+    private String algoritmoElegido ="RR";
     private int keys = 0;
     private int partition = 0;
     public PCController(){
