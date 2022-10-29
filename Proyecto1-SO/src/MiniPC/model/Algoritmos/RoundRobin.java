@@ -25,10 +25,11 @@ public class RoundRobin implements Algoritmos{
     private ArrayList<String> status;
     
     private ArrayList<PCB> procesos = new ArrayList<PCB>();
-    private int quantum = 3;
+    private int quantum = 2;
     private int contProcess = 0;
     private int contQuantum = 0;
     private boolean processFinish = false;
+    private boolean continu = false;
     
     
     public RoundRobin(int quantum){
@@ -61,106 +62,38 @@ public class RoundRobin implements Algoritmos{
                    
                }               
                procesos.add(proceso);
+              
            }
         } 
-        
-        //System.out.println("--Proccesos--");
-        //System.out.println(procesos);
-        /*
-        Collections.sort(procesos, new Comparator<PCB>() {
-            @Override
-            public int compare(PCB pcb1, PCB pcb2) {
-                if (pcb1.getArrivalTime() > pcb2.getArrivalTime()) {
-                    return 1;
-                }
-                if (pcb1.getArrivalTime() < pcb2.getArrivalTime()) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
-        */
         for(PCB proceso: procesos) {
             this.procesosEsperando.add(proceso);
             System.out.println("PBC: "+proceso.getFileName() +"RAFAGA:"+(proceso.getRafaga()));
         }
-        //if(currentPCB.getRafaga() == 1 && procesos.size() == 2){
-           // this.currentPCB = this.procesos.get(contProcess);
-            //contProcess = 0;
-            //contQuantum = 0;
-        //}else{
         if(this.processFinish == true){
            contQuantum =0;
            this.processFinish = false;
            this.currentPCB = this.procesos.get(contProcess);
            contQuantum++;
        }else{
-           if(contQuantum < quantum){
-            this.currentPCB = this.procesos.get(contProcess);
-            contQuantum++;
-           
-       } else{
-           if(contProcess == this.procesos.size()-1){
-               contProcess = 0;
-               contQuantum = 0;
-               this.currentPCB = this.procesos.get(contProcess);
-               contQuantum++;
-           }else{
-               /*if(this.processFinish == true && contQuantum == quantum){
+            if(contQuantum < quantum){
+                this.currentPCB = this.procesos.get(contProcess);
+                contQuantum++;
+            }else{
+                if(contProcess == this.procesos.size()-1){
+                    contProcess = 0;
                     contQuantum = 0;
-                    //contProcess++;
-                    this.currentPCB = this.procesos.get(contProcess);
-                    contQuantum++;
-               }else{*/
-                    contQuantum = 0;
-                    contProcess++;
-                    this.currentPCB = this.procesos.get(contProcess);
-                    contQuantum++;
-               //}
-                
-            }
-       }
-       // }
-       
-       
-                
-        }
-    
- /*if(this.processFinish == true){
-           contQuantum =0;
-           this.processFinish = false;
-           this.currentPCB = this.procesos.get(contProcess);
-           contQuantum++;
-       }else{
-           if(contQuantum < quantum){
-            this.currentPCB = this.procesos.get(contProcess);
-            contQuantum++;
-           
-       } else{
-           if(contProcess == this.procesos.size()-1){
-               contProcess = 0;
-               contQuantum = 0;
-               this.currentPCB = this.procesos.get(contProcess);
-               contQuantum++;
-           }else{
-               /*if(this.processFinish == true && contQuantum == quantum){
-                    contQuantum = 0;
-                    //contProcess++;
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
                }else{
-                   contQuantum = 0;
-                    contProcess++;
+                    contQuantum = 0;
+                    //contProcess++;
+                    procesos.remove(currentPCB);
+                    procesos.add(currentPCB);
                     this.currentPCB = this.procesos.get(contProcess);
                     contQuantum++;
-               //}
-                
+               }
             }
-       }
-       
-                
-        }*/
-       
+        }
 
         //ESTO ES PARTE DEL MÉTODO A IMPLEMENTAR
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -174,19 +107,12 @@ public class RoundRobin implements Algoritmos{
        if(result!=null){
            this.status = result.executeInstruction(cont);
            if(this.currentPCB.programFinished()){   
-           this.programFinished = true;
-           this.processFinish = true;
-           this.procesos.remove(this.currentPCB);     
-           //this.currentPCB = this.procesos.get(0);
-           
-           
+                this.programFinished = true;
+                this.processFinish = true;
+                this.procesos.remove(this.currentPCB);        
+            }  
        }
-       
-           
-       }
-       
-       this.currentTime++;
-              
+       this.currentTime++;    
        return result;
     }
 
