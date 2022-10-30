@@ -138,11 +138,11 @@ public class PCController {
             this.roundrobin = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el parametro del Round Robin", JOptionPane.INFORMATION_MESSAGE));
         }
         
-        else if (asignacion.equals("Paginacion")) {
+        if (asignacion.equals("Paginacion")) {
             this.partition = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de página/frame", JOptionPane.INFORMATION_MESSAGE));
         }
         
-        else  if (asignacion.equals("Particion Fija")) {
+        if (asignacion.equals("Particion Fija")) {
             this.partition = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el tamaño de la particion fija", JOptionPane.INFORMATION_MESSAGE));
         }
         
@@ -176,10 +176,10 @@ public class PCController {
         JOptionPane.showMessageDialog(app, process, "MiniPC", 1);
     }
     private void loadPCBArrival(){  
-
+                
                 JFrame frame = new JFrame("Porfavor ingrese el tiempo de arrivo para los procesos");
         
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 try 
                 {
                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -289,7 +289,7 @@ public class PCController {
                
         if(fileList !=null){
             for(int i = 0 ; i < fileList.length ; i ++){
-
+                
                 // Se verifica si el archivo es valido 
                 
                 if (testFile(fileList[i].toString())) {
@@ -445,6 +445,7 @@ public class PCController {
                    JOptionPane.showMessageDialog(this.app, "Debe de guardar la configuración antes de cargar archivos\n","MiniPC", 0);
                    return;
              }
+        
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
 
@@ -455,6 +456,7 @@ public class PCController {
         File[] files = chooser.getSelectedFiles();        
         
         this.filesToPCB(files);
+        
         this.loadPCBArrival();
         
         

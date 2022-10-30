@@ -34,7 +34,7 @@ public class ProcessTime {
     }
 
     public void setFinishHour(int finishHour) {
-        this.finishHour = finishHour;
+        this.finishHour = finishHour-1;
     }
 
     public int getStartMinute() {
@@ -82,11 +82,13 @@ public class ProcessTime {
         
         
     }
-
+    
     @Override
     public String toString() {
         getFinishTime();
-        return "Proceso:"+this.index+ " | Hora inicio = "+startHour+":"+startMinute+" | Hora Fin = "+finishHour+":"+finishMinute+" | Duracion en segundos = " + duration;
+        String msj  = "Proceso:"+this.index+ " | Llegada = "+startHour+""+" |  Tiempo Fin = "+finishHour+""+" | Duracion(ráfaga) = " + duration;
+        msj+="  |  Tr ="+(finishHour-startHour) + " |  Tr/Ts="+((finishHour-startHour)/duration);
+        return msj;
     }
 
     

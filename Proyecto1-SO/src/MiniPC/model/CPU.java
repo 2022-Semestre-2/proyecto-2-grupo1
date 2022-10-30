@@ -11,12 +11,15 @@ import MiniPC.model.Algoritmos.FCFS;
 import MiniPC.model.Algoritmos.HRRN;
 import MiniPC.model.Algoritmos.RoundRobin;
 import MiniPC.model.Algoritmos.SRT;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -26,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 //Organiza la ejecución de los procesos
 public class CPU {
     private String cpuName;
+    
     private PCB currentPcb;
     private int currentProcessIndex;
     private Queue<PCB> processQueue = new LinkedList<PCB>();
@@ -112,7 +116,8 @@ public class CPU {
 // Aquí ejecuta la instrucción pero todo es por defecto hasta que se cambie lo de memioria
 
     public boolean executeInstructionAlgorithm(Memory memory,Memory disk, PCController cont){
-        
+        ProcessTime time = new ProcessTime();
+        startTime(time);
         
         
         
@@ -131,10 +136,12 @@ public class CPU {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
-        System.out.println(this.algoritmo);
+        
         PCB pcb = this.algoritmo.executeInstruction(this.processQueue, cont);
         
         if(pcb==null){return false;}
+        time.setStartHour(pcb.getArrivalTime());
+        pcb.setStatus("Exec");
         this.currentPcbRegistersStatus = this.algoritmo.getStatus();
         int i = 0 ;
         int index  = i;
@@ -152,6 +159,8 @@ public class CPU {
         this.processInstructionIndex =this.algoritmo.getTime()-1;
             
         if(algoritmo.programIsFinished()){
+            time.setFinishHour(this.algoritmo.getTime());
+            finishTime(time,pcb);
             this.processQueue.remove(pcb);
             pcb.setStatus("Fin");
             memory.deallocatePCB(pcb);                          
@@ -170,19 +179,19 @@ public class CPU {
          
     public void startTime(ProcessTime time){
         LocalDateTime locaDate = LocalDateTime.now();
-        int hours  = locaDate.getHour();
-        int minutes = locaDate.getMinute();
-        time.setStartHour(hours);
-        time.setStartMinute(minutes);
+        //int hours  = locaDate.getHour();
+        //int minutes = locaDate.getMinute();
+        //time.setStartHour(hours);
+        //time.setStartMinute(minutes);
     }
     
-    public void finishTime(ProcessTime time) {
+    public void finishTime(ProcessTime time,PCB pcb) {
         LocalDateTime locaDate = LocalDateTime.now();
         int hours  = locaDate.getHour();
         int minutes = locaDate.getMinute();
-        time.setFinishHour(hours);
-        time.setFinishMinute(minutes);
-        time.setDuration(this.currentPcb.getPCBDuration());
+        //time.setFinishHour(hours);
+        //time.setFinishMinute(minutes);
+        time.setDuration(pcb.getPCBDuration());
         time.setIndex(currentProcessIndex+1);
         this.stats.add(time);
     }
@@ -201,7 +210,7 @@ public class CPU {
             return;
         }
         if(this.currentPcb.programFinished()){ 
-            finishTime(time);
+            finishTime(time,this.currentPcb);
             PCB removed = processQueue.remove();
             removed.setStatus("Fin");               
             memory.deallocatePCB(removed);    
@@ -288,8 +297,8 @@ public class CPU {
                 
                 boolean res = this.executeInstructionAlgorithm(memory, disk, cont);            
                 if(!res){continue;}
-//                        
-                
+          
+          
                 cont.updatePCBStatusTable();
                 cont.loadPCBstoMem();                                        
                 if(cpu1.getProcessInstructionIndex()!=0){

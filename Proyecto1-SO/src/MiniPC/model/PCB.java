@@ -60,6 +60,7 @@ public class PCB {
     private final CPURegister dx = new CPURegister(0); 
     private final CPURegister ac = new CPURegister(0);    
     private Integer ir =0;
+    private int startingRafaga;
     private Integer pc =0;
     private int currentInstruction;
     private Memory memory;    
@@ -86,7 +87,9 @@ public class PCB {
         return this.fileName;
     }
     
-    
+    public int getStartRafaga(){
+        return this.startingRafaga;
+    }
     private int duration = 0;
     public PCB(){        
         this.registerAddressMapper.put(1, ax);
@@ -228,6 +231,7 @@ public class PCB {
     public void setLoader(String file){
         this.loader = new FileLoader(file);
         this.rafaga = this.getPCBinstrucctionSize();
+        this.startingRafaga = this.rafaga;
     }
     public int getProgramCounter(){
         return this.pc;
