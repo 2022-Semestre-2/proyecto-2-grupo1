@@ -105,14 +105,20 @@ public class Segmentation implements AsignadorMemoria {
             
         }
         
-        int indexAux = 0;
+        /*int indexAux = 0;
         for(Segments segment: this.segments){
             if(segment.getPCB()!=null && segment.getPCB().equals(pcb)){
                 this.segments.remove(indexAux);
                 indexAux++;
             }
                        
-    }
+    }*/
+        
+        for(int i = 0; i < this.segments.size(); i++){
+            if(segments.get(i).getPCB()!=null && segments.get(i).getPCB().equals(pcb)){
+                this.segments.remove(i);
+            }
+        }
         
         //se busca el PCB siguiente        
         PCB nextProcessToExe= null;
