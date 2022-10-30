@@ -321,7 +321,7 @@ public class Paging implements AsignadorMemoria {
             
         }
         public void setEnd(int end){
-            this.start = end;
+            this.end = end;
             
         }
         public int size(){
